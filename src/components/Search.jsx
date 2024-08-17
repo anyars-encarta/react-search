@@ -1,12 +1,23 @@
 import React, { useState } from 'react'
 import { Users } from '../users'
+import Table from './Table';
 
 const Search = () => {
     const [query, setQuery] = useState("");
 
-    // console.log(Users.filter(user => user.first_name.includes(query)))
-    const filteredUsers = Users.filter(user => user.first_name.toLowerCase().includes(query));
-    
+    const keys = ['first_name', 'last_name', 'email'];
+
+    const filteredUsers = (data) => {
+        return (
+            data.filter(item =>
+                // item.first_name.toLowerCase().includes(query) ||
+                // item.last_name.toLowerCase().includes(query) ||
+                // item.email.toLowerCase().includes(query)
+                keys.some(key => item[key].toLowerCase().includes(query))
+            )
+        );
+    };
+
     return (
         <div>
             <input
@@ -16,12 +27,7 @@ const Search = () => {
                 onChange={(e) => setQuery(e.target.value)}
             />
 
-            <ul className="list">
-                {filteredUsers.map((user) => (
-                    <li key={user.id} className="listItem">{user.first_name}</li>
-                ))}
-
-            </ul>
+            <Table data={filteredUsers(Users)} />
         </div>
     )
 }
