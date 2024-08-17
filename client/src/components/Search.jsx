@@ -1,6 +1,11 @@
 import React, { useState } from 'react'
-import { Users } from '../users'
 import Table from './Table';
+
+useEffect(() => {
+    const fetchUsers = async () => {
+        const res = await
+    }
+}, []);
 
 const Search = () => {
     const [query, setQuery] = useState("");
