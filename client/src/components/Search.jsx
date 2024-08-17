@@ -1,27 +1,21 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import Table from './Table';
-
-useEffect(() => {
-    const fetchUsers = async () => {
-        const res = await
-    }
-}, []);
+import axios from 'axios';
 
 const Search = () => {
+    const [users, setUsers] = useState([]);
     const [query, setQuery] = useState("");
 
-    const keys = ['first_name', 'last_name', 'email'];
+    useEffect(() => {
+        const fetchUsers = async () => {
+            const res = await axios.get(`http://localhost:5000?q=${query}`);
+            setUsers(res.data)
+        };
 
-    const filteredUsers = (data) => {
-        return (
-            data.filter(item =>
-                // item.first_name.toLowerCase().includes(query) ||
-                // item.last_name.toLowerCase().includes(query) ||
-                // item.email.toLowerCase().includes(query)
-                keys.some(key => item[key].toLowerCase().includes(query))
-            )
-        );
-    };
+        if (query.length === 0 || query.length > 2) {
+            fetchUsers();
+        }
+    }, [query]);
 
     return (
         <div>
@@ -32,7 +26,7 @@ const Search = () => {
                 onChange={(e) => setQuery(e.target.value)}
             />
 
-            <Table data={filteredUsers(Users)} />
+            <Table data={users} />
         </div>
     )
 }
